@@ -4,6 +4,7 @@ __all__ = [
     "ColumnSelector",
     "DictMapper",
     "FormulaicTransformer",
+    "FormulaicTermSelector",
     "IdentityTransformer",
     "InformationFilter",
     "IntervalEncoder",
@@ -19,6 +20,7 @@ __all__ = [
 
 from sklego.preprocessing.columncapper import ColumnCapper
 from sklego.preprocessing.dictmapper import DictMapper
+from sklego.preprocessing.formulaic_term_selector import FormulaicTermSelector
 from sklego.preprocessing.formulaictransformer import FormulaicTransformer
 from sklego.preprocessing.identitytransformer import IdentityTransformer
 from sklego.preprocessing.intervalencoder import IntervalEncoder

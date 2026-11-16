@@ -153,6 +153,32 @@ formulaic_transformer.fit(X, y).transform(X)
 with open(_static_path / "formulaic-2.md", "w") as f:
     f.write(formulaic_transformer.fit(X, y).transform(X).head().to_markdown(index=False))
 
+# --8<-- [start:formulaic-term-selector]
+from sklego.preprocessing import FormulaicTermSelector
+
+df = pd.DataFrame({
+    "a": [1, 2, 3, 4, 5, 6, 7, 8],
+    "city": ["A", "B", "A", "B", "C", "C", "A", "B"],
+    "month": ["m1", "m1", "m2", "m2", "m1", "m2", "m1", "m2"],
+    "y": [0, 1, 0, 1, 0, 1, 0, 1],
+})
+X, y = df[["a", "city", "month"]], df["y"]
+
+term_selector = FormulaicTermSelector(
+    formula="a + city + month + city:month",
+    k=2,
+    return_type="pandas",
+)
+term_selector.fit(X, y)
+
+term_selector.selected_terms_
+term_selector.column_names_
+term_selector.transform(X)
+# --8<-- [end:formulaic-term-selector]
+
+with open(_static_path / "formulaic-term-selector.md", "w") as f:
+    f.write(term_selector.transform(X).to_markdown(index=False))
+
 ######################################## RBF ###########################################
 ##########################################################################################
 

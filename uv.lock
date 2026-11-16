@@ -3947,7 +3947,7 @@ utils = [
 requires-dist = [
     { name = "cvxpy", marker = "extra == 'cvxpy'", specifier = ">=1.5.2" },
     { name = "fonttools", marker = "extra == 'utils'", specifier = ">=4.60.2" },
-    { name = "formulaic", marker = "extra == 'formulaic'", specifier = ">=0.6.0" },
+    { name = "formulaic", marker = "extra == 'formulaic'", specifier = ">=1.1.0" },
     { name = "jupyter", marker = "extra == 'utils'", specifier = ">=1.0.0" },
     { name = "jupyter-server", marker = "extra == 'utils'", specifier = ">=2.18.0" },
     { name = "jupyterlab", marker = "extra == 'utils'", specifier = ">=4.5.7" },

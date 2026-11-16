@@ -47,7 +47,7 @@ documentation = "https://koaning.github.io/scikit-lego/"
 
 [project.optional-dependencies]
 cvxpy = ["cvxpy>=1.5.2"]
-formulaic = ["formulaic>=0.6.0"]
+formulaic = ["formulaic>=1.1.0"]
 umap = ["umap-learn>=0.5.8", "numba>=0.61"]
 all = ["scikit-lego[cvxpy,formulaic,umap]"]
 

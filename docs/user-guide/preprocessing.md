@@ -144,6 +144,38 @@ You'll notice that now the constant array is gone and it is replaced with a dumm
 The formula syntax is pretty powerful, if you'd like to learn we refer you
 to [formulas][formulaic-formulas] documentation.
 
+### Selecting whole formula terms
+
+A category or an interaction in a formula expands into several columns. If you want to keep only `k` of the business terms, selecting columns one by one would split such a term apart. [`FormulaicTermSelector`][formulaic-term-selector-api] selects at the term level instead: every column of a selected term is kept, and the transformer never keeps a fraction of a term.
+
+It greedily adds the term that maximises
+
+$$\text{relevance} - \lambda \cdot \text{mean redundancy against the already selected terms}$$
+
+where the relevance of a term is the mean of the squared correlations of its columns with `y`, and the redundancy between two terms is the mean of the absolute correlations between their columns. In the first round only the relevance is used. The intercept is always kept and does not count towards `k`, and the selection scores are available in `scores_`.
+
+```py
+--8<-- "docs/_scripts/preprocessing.py:formulaic-term-selector"
+```
+
+--8<-- "docs/_static/preprocessing/formulaic-term-selector.md"
+
+The selected terms are stored in `selected_terms_` (here `["city", "month"]`), the resulting columns in `column_names_`. The model specification of the fitted transformer is frozen: `transform` only needs the raw columns the selected terms depend on and keeps the category levels, the stateful transform state and the column meanings of the training data, so it can be used in a `Pipeline` like any other transformer.
+
+```py
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklego.preprocessing import FormulaicTermSelector
+
+pipe = Pipeline([
+    ("terms", FormulaicTermSelector("a + city + month + city:month", k=2)),
+    ("model", LogisticRegression()),
+])
+pipe.fit(X, y)
+pipe.predict(df[["city", "month"]])
+```
+
 ## Repeating Basis Function Transformer
 
 Some variables are of a circular nature. For example, the days of the year, 1-Jan-2019 (day 1) is just as close to 2-Jan-2019 (day 2) as it is to 31-Dec-2018 (day 365).
@@ -300,6 +332,7 @@ The `OutlierRemover` class is initialized with an `outlier_detector` estimator, 
 [id-transformer-api]: ../../api/preprocessing#sklego.preprocessing.identitytransformer.IdentityTransformer
 [column-capper-api]: ../../api/preprocessing#sklego.preprocessing.columncapper.ColumnCapper
 [formulaic-api]: ../../api/preprocessing#sklego.preprocessing.formulaictransformer.FormulaicTransformer
+[formulaic-term-selector-api]: ../../api/preprocessing#sklego.preprocessing.formulaic_term_selector.FormulaicTermSelector
 [rbf-api]: ../../api/preprocessing#sklego.preprocessing.repeatingbasis.RepeatingBasisFunction
 [interval-encoder-api]: ../../api/preprocessing#sklego.preprocessing.intervalencoder.IntervalEncoder
 [decay-section]: ../../user-guide/meta#decayed-estimation
